@@ -18,7 +18,7 @@ public class UpdateManyTest {
     public static void main(String[] args) {
         MongoCollection<Document> collection = Database.getCollection("todo");
 
-        // ✅ 여러 ObjectId 리스트 정의
+        // 여러 ObjectId 리스트 정의
         List<ObjectId> ids = Arrays.asList(
                 new ObjectId("68355afb1efcba5655327c01"),
                 new ObjectId("68355b65d1a96306d2306574")
