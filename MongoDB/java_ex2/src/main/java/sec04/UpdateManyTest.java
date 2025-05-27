@@ -8,27 +8,29 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import static com.mongodb.client.model.Filters.eq;
+import java.util.Arrays;
+import java.util.List;
 
-public class UpdateOne {
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
+
+public class UpdateManyTest {
     public static void main(String[] args) {
         MongoCollection<Document> collection = Database.getCollection("todo");
 
-        String id = "68355f3a39704d1b10d9b5a7";
-        Bson query = eq("_id", new ObjectId(id));
+        // ✅ 여러 ObjectId 리스트 정의
+        List<ObjectId> ids = Arrays.asList(
+                new ObjectId("68355afb1efcba5655327c01"),
+                new ObjectId("68355b65d1a96306d2306574")
+        );
+        Bson query = in("_id", ids);
 
-        /*
-        * Updates : mongoDB의 수정 쿼리를 작성하기 위한 객체
-        * - combine() : 여러 조건의 수정을 해야할 때, 엮어주는 역할
-        * - set("필드명", "수정할값") : 해당필드의 값을 수정할값으로 변경
-        * - currentTimeStamp("필드") : 필드의 값을 현재시간으로 변경
-        * */
         Bson updates = Updates.combine(
                 Updates.set("name", "modify name"),
                 Updates.currentTimestamp("lastUpdated"));
 
         // 조건에 맞는 하나의 도큐먼트를 업데이트
-        UpdateResult result = collection.updateOne(query, updates);
+        UpdateResult result = collection.updateMany(query, updates);
 
         // 조건에 맞는 모든 도큐먼트를 한번에 업데이트
 //        UpdateResult result = collection.updateMany(query, updates);
